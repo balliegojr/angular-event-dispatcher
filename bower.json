@@ -1,0 +1,25 @@
+{
+  "name": "eventDispatcher-angularjs",
+  "version": "0.0.1",
+  "authors": [
+    "Ilson Roberto Balliego Junior <ilson.balliego@prontmed.com>"
+  ],
+  "description": "An event dispatcher for angularJs",
+  "main": "src/eventDispatcher.js",
+  "keywords": [
+    "angularjs",
+    "eventdispatcher"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "dependencies": {
+    "angular": "~1.4.4",
+    "jquery": "~2.1.4",
+    "angular-mocks": "~1.4.4"
+  }
+}
