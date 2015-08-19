@@ -5,21 +5,14 @@
 
 	angular.module('eventDispatcherModule', ['RegistryModule']).service('eventDispatcher', ['RegistryFactory', function(RegistryFactory) {
 		var eventSubscriptions = RegistryFactory.newRegistry();
-
+		var that = this;
 		function Unsubscriber(eventName, callback) {
-			this.destroy = function() {
-				var subscribers = eventSubscriptions.getValue(eventName),
-					i;
-
-				for (i = subscribers.length - 1; i >= 0; i--) {
-					if (subscribers[i] === callback) {
-						subscribers.splice(i, 1);
-					}
-				}
+			return function() {
+				that.off(eventName, callback);
 			};
 		}
 
-		this.subscribe = function(eventName, callback) {
+		var subscribe = function(eventName, callback){
 			// Retrieve a list of current subscribers for eventName (if any)
 			var subscribers = eventSubscriptions.getValue(eventName);
 
@@ -33,14 +26,13 @@
 			// Add the given callback function to the end of the array with
 			// eventSubscriptions for this event.
 			subscribers.push(callback);
-			return new Unsubscriber(eventName, callback);
 		};
 
-		this.unsubscribe = function(eventName, callback) {
+		var unsubscribe = function(eventName, callback){
 			var subscribers = eventSubscriptions.getValue(eventName),
 				i;
 
-			if (typeof subscribers === 'undefined') {
+			if ( typeof subscribers === 'undefined') {
 				// No list found for this event, return early to abort execution
 				return;
 			}
@@ -49,6 +41,34 @@
 				if (subscribers[i] === callback) {
 					subscribers.splice(i, 1);
 				}
+			}
+		};
+
+		/*
+			Subscribe to an event or array of events
+			returns an object to destroy the eventListener
+		*/
+		this.on = function(eventName, callback) {
+			if (eventName instanceof Array){
+				for (var i = 0; i < eventName.length; i++) {
+					subscribe(eventName[i], callback);
+				}
+			} else {
+				subscribe(eventName, callback);
+			}
+
+			return new Unsubscriber(eventName, callback);
+		};
+
+
+
+		this.off = function(eventName, callback) {
+			if (eventName instanceof Array){
+				for (var i = 0; i < eventName.length; i++) {
+					unsubscribe(eventName[i], callback);
+				}
+			} else {
+				unsubscribe(eventName, callback);
 			}
 		};
 
@@ -73,6 +93,4 @@
 			}
 		};
 	}]);
-
-
 })();

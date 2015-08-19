@@ -4,8 +4,8 @@ describe("eventDispatcherModule", function() {
 	describe("eventDispatcher", function() {
 		var dispatcher;
 		var stub = {
-					fn: function(){}
-				};
+			fn: function(){}
+		};
 
 		beforeEach(module('eventDispatcherModule'));
 		beforeEach(inject(function(eventDispatcher) {
@@ -15,19 +15,29 @@ describe("eventDispatcherModule", function() {
 			spyOn(stub, 'fn');
 		}));
 
-		describe("the method subscribe", function() {
+		describe("the method on", function() {
 			it("it's defined", function() {
-				expect(dispatcher.subscribe).toBeDefined();
+				expect(dispatcher.on).toBeDefined();
 			});
 
 			it("subscribe to an event", function() {
-				dispatcher.subscribe('event', function() {
+				dispatcher.on('event', stub.fn);
+				dispatcher.trigger('event');
 
-				});
+				expect(stub.fn).toHaveBeenCalled();
+			});
+
+			it("subscribe to multiple events", function() {
+				dispatcher.on(['event', 'event2', 'event3'], stub.fn);
+				dispatcher.trigger('event');
+				dispatcher.trigger('event2');
+				dispatcher.trigger('event3');
+
+				expect(stub.fn.calls.count()).toBe(3);
 			});
 
 			it("return an unsubscriber", function() {
-				var unsub = dispatcher.subscribe('event', function() {
+				var unsub = dispatcher.on('event', function() {
 
 				});
 
@@ -35,20 +45,21 @@ describe("eventDispatcherModule", function() {
 				expect(unsub).toBeDefined();
 			});
 
-			it("the unsubscriber have a destroy method", function() {
-				var unsub = dispatcher.subscribe('event', function() {
+			it('unsubscribe an event through the unsubscriber', function(){
+				var ev = dispatcher.on('event', stub.fn);
+				dispatcher.on('event', jasmine.createSpy('spy'));
 
-				});
-
-				expect(unsub.destroy).toBeDefined();
+				ev();
+				dispatcher.trigger('event');
+				expect(stub.fn).not.toHaveBeenCalled();
 			});
 
-			it('unsubscribe an event through destroy', function(){
-				var unsub = dispatcher.subscribe('event', stub.fn);
-				dispatcher.subscribe('event', jasmine.createSpy('spy'));
+			it('unsubscribe multiple events through the unsubscriber', function(){
+				var ev = dispatcher.on(['event', 'event2'], stub.fn);
 
-				unsub.destroy();
+				ev();
 				dispatcher.trigger('event');
+				dispatcher.trigger('event2');
 				expect(stub.fn).not.toHaveBeenCalled();
 			});
 		});
@@ -59,7 +70,7 @@ describe("eventDispatcherModule", function() {
 			});
 
 			it('fires an event', function() {
-				dispatcher.subscribe('newEvent', stub.fn);
+				dispatcher.on('newEvent', stub.fn);
 
 				dispatcher.trigger('newEvent');
 				expect(stub.fn).toHaveBeenCalled();
@@ -71,9 +82,9 @@ describe("eventDispatcherModule", function() {
 			});
 
 			it('fires an event for multiples listeners', function() {
-				dispatcher.subscribe('newEvent', stub.fn);
-				dispatcher.subscribe('newEvent', stub.fn);
-				dispatcher.subscribe('newEvent', stub.fn);
+				dispatcher.on('newEvent', stub.fn);
+				dispatcher.on('newEvent', stub.fn);
+				dispatcher.on('newEvent', stub.fn);
 
 				dispatcher.trigger('newEvent');
 
@@ -83,7 +94,7 @@ describe("eventDispatcherModule", function() {
 
 			it('passes data to the event', function() {
 
-				dispatcher.subscribe('dataEvent', function(arg) {
+				dispatcher.on('dataEvent', function(arg) {
 					expect(arg.ctx).toBe('value');
 				});
 
@@ -97,30 +108,40 @@ describe("eventDispatcherModule", function() {
 
 		});
 
-		describe('the unsubscribe method', function() {
+		describe('the off method', function() {
 			it('is defined', function() {
-				expect(dispatcher.unsubscribe).toBeDefined();
+				expect(dispatcher.off).toBeDefined();
 			});
 
 			it('unsubscribe an event', function() {
-				dispatcher.subscribe('newEvent', stub.fn);
-				dispatcher.unsubscribe('newEvent', stub.fn);
+				dispatcher.on('newEvent', stub.fn);
+				dispatcher.off('newEvent', stub.fn);
 
 				dispatcher.trigger('newEvent');
 				expect(stub.fn).not.toHaveBeenCalled();
 			});
 
+			it('unsubscribe multiple events', function() {
+				var events = ['event', 'event2'];
+				dispatcher.on(events, stub.fn);
+				dispatcher.off(events, stub.fn);
+
+				dispatcher.trigger('event');
+				dispatcher.trigger('event2');
+				expect(stub.fn).not.toHaveBeenCalled();
+			});
+
 			it('do nothing if no event was found', function() {
-				dispatcher.unsubscribe('newEvent');
+				dispatcher.off('newEvent');
 			});
 
 			it('unsubscribe only the callback of an event', function() {
 				stub.fn2 = function(){};
 				spyOn(stub, 'fn2');
 
-				dispatcher.subscribe('newEvent', stub.fn);
-				dispatcher.subscribe('newEvent', stub.fn2);
-				dispatcher.unsubscribe('newEvent', stub.fn);
+				dispatcher.on('newEvent', stub.fn);
+				dispatcher.on('newEvent', stub.fn2);
+				dispatcher.off('newEvent', stub.fn);
 
 				dispatcher.trigger('newEvent');
 
