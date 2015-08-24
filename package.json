@@ -2,13 +2,20 @@
   "name": "eventDispatcher-angularjs",
   "version": "0.0.1",
   "devDependencies": {
-    "grunt": "~0.4.4",
-    "grunt-contrib-jshint": "latest",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jasmine": "^2.0.1",
+    "gulp-jshint": "^1.11.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.2.0",
+    "jasmine-core": "^2.3.4",
     "jshint-stylish": "latest",
-    "grunt-contrib-uglify": "latest",
-    "load-grunt-tasks": "latest",
-    "grunt-contrib-jasmine": "~0.6.5",
-    "grunt-contrib-connect": "~0.5.0",
-    "grunt-template-jasmine-istanbul": "~0.3.3"
+    "karma": "^0.13.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-coverage": "^0.4.2",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "phantomjs": "^1.9.18"
   }
 }
