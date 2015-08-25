@@ -17,7 +17,7 @@ gulp build
 ```
 
 ## Usage
-Add build/event-dispatcher.min.js to your html file
+Add [build/event-dispatcher.min.js](https://github.com/balliegojr/angular-event-dispatcher/blob/master/build/event-dispatcher.min.js) to your html file
 ```
 <script src="[vendor_folder]/event-dispatcher.min.js"></script>
 ```
