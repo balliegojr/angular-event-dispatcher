@@ -12,10 +12,9 @@
   ],
   "license": "MIT",
   "ignore": [
-    "**/.*",
     "node_modules",
     "bower_components",
-    "test"
+    ".coverage"
   ],
   "dependencies": {
     "angular": "~1.4.4",

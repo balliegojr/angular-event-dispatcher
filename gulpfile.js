@@ -1,22 +1,21 @@
-var gulp   = require('gulp');
+var gulp = require('gulp');
 
 
 var Server = require('karma').Server;
 gulp.task('karma', function (done) {
-  new Server({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done).start();
+    new Server({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+    }, done).start();
 });
-
-
 
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 gulp.task('jshint', function() {
-  return gulp.src(['src/*.js', 'test/*.js'])
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish));
+    return gulp.src(['src/*.js', 'test/*.js'])
+        .pipe(jshint())
+        .pipe(jshint.reporter(stylish));
 });
 
 
