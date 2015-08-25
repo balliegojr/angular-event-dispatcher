@@ -17,17 +17,17 @@ gulp build
 ```
 
 ## Usage
-1. Add build/event-dispatcher.min.js to your html file
+Add build/event-dispatcher.min.js to your html file
 ```
 <script src="[vendor_folder]/event-dispatcher.min.js"></script>
 ```
-2 Add eventDispatcherModule as a requirement for your module
+Add eventDispatcherModule as a requirement for your module
 
 ```
 angular.module('myApp', ['eventDispatcherModule']);
 ```
 
-3. Receive the eventDispatcher into your services
+ the eventDispatcher into your services
 ```
 service('myService', ['eventDispatcher', function(eventDispather) {
 	//fire the event
