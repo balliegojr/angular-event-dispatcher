@@ -1,13 +1,27 @@
 # angular-eventDispatcher
 
+An event dispatcher to be used with [angular](https://github.com/angular/angular.js) without the dependency of **$scope**
+
+## Runing tests
+```
+karma start
+
+or
+
+gulp karma
+```
+
+## Build
+```
+gulp build
+```
+
 ## Usage
-1. Add event-dispatcher.min.js to your html file
+1. Add build/event-dispatcher.min.js to your html file
 ```
 <script src="[vendor_folder]/event-dispatcher.min.js"></script>
 ```
-
-
-2. Add eventDispatcherModule as a requirement for your module
+2 Add eventDispatcherModule as a requirement for your module
 
 ```
 angular.module('myApp', ['eventDispatcherModule']);
