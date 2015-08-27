@@ -89,7 +89,11 @@
 			context = context || this.caller;
 
 			for (i = subscribers.length - 1; i >= 0; i--) {
-				subscribers[i].apply(context, data);
+				try {
+					subscribers[i].apply(context, data);
+				} catch (e) {
+					console.error(e);
+				}
 			}
 		};
 	}]);

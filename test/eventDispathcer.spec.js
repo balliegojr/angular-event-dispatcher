@@ -149,5 +149,19 @@ describe("eventDispatcherModule", function() {
 				expect(stub.fn2).toHaveBeenCalled();
 			});
 		});
+
+		it('ensure that no error will stop the execution', function() {
+			var errFn = function(){
+				throw 'err';
+			};
+
+			var fn = jasmine.createSpy('fn');
+
+			dispatcher.on('event', errFn);
+			dispatcher.on('event', fn);
+
+			dispatcher.trigger('event');
+			expect(fn).toHaveBeenCalled();
+		});
 	});
 });
