@@ -27,7 +27,7 @@ Add eventDispatcherModule as a requirement for your module
 angular.module('myApp', ['eventDispatcherModule']);
 ```
 
- the eventDispatcher into your services
+Inject the eventDispatcher into your services
 ```
 service('myService', ['eventDispatcher', function(eventDispather) {
 	//fire the event
@@ -64,7 +64,7 @@ Subscribe to an event or to multiples events
 
 callback: the function to be called when the event is fired
 
-returns an objecto to unsubscribe the event
+returns an object to unsubscribe the event
 
 ```
 var callback = function(args) {
