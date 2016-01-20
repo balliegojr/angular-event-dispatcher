@@ -29,6 +29,7 @@
 		};
 	}
 
+
 	/**
 	* Registry Module
 	*

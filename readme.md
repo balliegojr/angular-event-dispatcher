@@ -1,3 +1,4 @@
+
 # angular-eventDispatcher
 
 An event dispatcher to be used with [angular](https://github.com/angular/angular.js) without the dependency of **$scope**
@@ -27,23 +28,48 @@ Add eventDispatcherModule as a requirement for your module
 angular.module('myApp', ['eventDispatcherModule']);
 ```
 
-Inject the eventDispatcher into your services
+Add the eventDispatcher into your services
 ```
-service('myService', ['eventDispatcher', function(eventDispather) {
+service('myService', ['eventDispatcher', function(eventDispatcher) {
 	//fire the event
     eventDispatcher.trigger('myEvent', 'parameter');
 
 }]);
 
-controller('myController', ['eventDispatcher', function(eventDispather) {
+controller('myController', ['eventDispatcher', function(eventDispatcher) {
     eventDispatcher.on('myEvent', function(arg) {
         // do something when the event is fired
     });
 }]);
 ```
 
+### StrictMode
+Allow only registered events
+
+Receive the eventDispatcherProvider into your config section and call strictModeOn
+```
+config(['eventDispatcherProvider', function(eventDispatcherProvider) {
+    eventDispatcherProvider.strictModeOn();
+}]);
+
+service('myService', ['eventDispatcher', function(eventDispatcher){
+	eventDispatcher.register('myEvent');
+
+	eventDispatcher.on('myEvent', function() { });
+	eventDispatcher.on('anotherEvent', function() { }); //Will throw an error
+}]);
+```
 
 ## API
+### register(eventName)
+Register an event (strict mode only)
+
+```
+controller('myController', ['eventDispatcher', function(eventDispatcher) {
+    eventDispatcher.register('myEvent');
+}]);
+```
+
 ### trigger(eventName, [parameters])
 Fires an event
 
@@ -64,7 +90,7 @@ Subscribe to an event or to multiples events
 
 callback: the function to be called when the event is fired
 
-returns an object to unsubscribe the event
+returns an objecto to unsubscribe the event
 
 ```
 var callback = function(args) {

@@ -1,13 +1,97 @@
 describe("eventDispatcherModule", function() {
 	'use strict';
 
+	beforeEach(module('eventDispatcherModule'));
+
+	describe('eventDispatcherProvider', function() {
+		var provider, eventDispatcher;
+
+		beforeEach(module(['eventDispatcherProvider', function(eventDispatcherProvider) {
+			provider = eventDispatcherProvider;
+			provider.strictModeOn();
+		}]));
+
+		beforeEach(inject(function() {
+
+		}));
+
+
+
+		beforeEach(inject(function(_eventDispatcher_) {
+			eventDispatcher = _eventDispatcher_;
+		}));
+
+		describe('describe a strictModeOn method that', function() {
+			it('is defined', function() {
+				expect(provider.strictModeOn).toBeDefined();
+			});
+
+			it('set the strictMode to ON', function() {
+				provider.strictModeOn();
+			});
+
+			it('alters the on method behavior', function() {
+
+				var fn = function(){
+					eventDispatcher.on('unregistered', function(){});
+				};
+
+				expect(fn).toThrow('EventDispatcher: unregistered not registered');
+			});
+
+			it('alters the trigger method behavior', function() {
+				var fn = function(){
+					eventDispatcher.trigger('unregistered', function(){});
+				};
+
+				expect(fn).toThrow('EventDispatcher: unregistered not registered');
+			});
+
+			it('alters the off method behavior', function() {
+				var fn = function(){
+					eventDispatcher.off('unregistered', function(){});
+				};
+
+				expect(fn).toThrow('EventDispatcher: unregistered not registered');
+			});
+		});
+
+		describe('the register method that', function() {
+			it('it is defined', function() {
+				expect(eventDispatcher.register).toBeDefined();
+			});
+
+			it('register an event with strict', function() {
+				eventDispatcher.register('event');
+
+				var fn = function(){
+					eventDispatcher.on('event', function(){});
+				};
+
+				expect(fn).not.toThrow();
+			});
+
+			it('do nothing if try to register twice', function() {
+				eventDispatcher.register('event');
+
+				var fn = jasmine.createSpy('fn');
+				eventDispatcher.on('event', fn);
+
+				eventDispatcher.register('event'); //do nothing
+
+				eventDispatcher.trigger('event');
+
+				expect(fn).toHaveBeenCalled();
+			});
+		});
+	});
+
 	describe("eventDispatcher", function() {
 		var dispatcher;
 		var stub = {
 			fn: function(){}
 		};
 
-		beforeEach(module('eventDispatcherModule'));
 		beforeEach(inject(function(eventDispatcher) {
 			dispatcher = eventDispatcher;
 			expect(dispatcher).toBeDefined();
@@ -149,6 +233,7 @@ describe("eventDispatcherModule", function() {
 				expect(stub.fn2).toHaveBeenCalled();
 			});
 		});
+
 
 		it('ensure that no error will stop the execution', function() {
 			var errFn = function(){
