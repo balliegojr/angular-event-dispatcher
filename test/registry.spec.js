@@ -1,7 +1,7 @@
 describe("eventDispatcherModule", function() {
 	'use strict';
 
-	beforeEach(module('eventDispatcherModule'));
+	beforeEach(module('RegistryModule'));
 	describe("the Registry factory", function() {
 		var registryFactory;
 
